@@ -3,4 +3,11 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+
+    <!-- App Theme Colours -->
+    <color name="dark_blue">#3AA3C0</color>
+    <color name="light_blue">#69B7CE</color>
+    <color name="lighter_blue">#7DC5DE</color>
+    <color name="blue_grey">#C4DBE9</color>
+    <color name="grey">#E9EFFB</color>
 </resources>

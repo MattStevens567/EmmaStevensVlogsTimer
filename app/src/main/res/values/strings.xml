@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">EmmaStevensVlogsTimer</string>
+    <string name="app_name">EJS Timer</string>
     <string name="StartTimer">Start Timer</string>
     <string name="Title">Emma Stevens Vlogs </string>
+
+
+
 </resources>

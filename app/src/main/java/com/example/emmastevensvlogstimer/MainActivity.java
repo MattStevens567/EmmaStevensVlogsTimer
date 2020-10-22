@@ -5,12 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-
-import java.util.Timer;
+import android.widget.ImageButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button mButtonTest;
+    private ImageButton mButtonBaseline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        mButtonTest = findViewById(R.id.buttonTest);
-        mButtonTest.setOnClickListener(view -> {
+        mButtonBaseline = findViewById(R.id.imageButton_Baseline);
+        mButtonBaseline.setOnClickListener(view -> {
             loadTimer();
         });
     }
