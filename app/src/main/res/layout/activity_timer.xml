@@ -12,7 +12,8 @@
         android:id="@+id/textview_timer_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Timer"
+        android:text="A BIG COOL LOGO GOES HERE"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,5 +82,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.88"
         app:srcCompat="@drawable/ic_reset" />
+
+    <ImageButton
+        android:id="@+id/imagebutton_back"
+        android:layout_width="30dp"
+        android:layout_height="29dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.04000002"
+        app:srcCompat="@drawable/ic_arrow_back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textview_title_circuit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/TitleCircuit"
+        android:fontFamily="@font/montserrat_bold"
+        android:textSize="30sp"
+        android:gravity="center">
+
+
+    </TextView>
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </SeekBar>
+
+
+    <TextView
+        android:id="@+id/textview_title_round"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/TitleRound"
+        android:textSize="30sp"
+        android:layout_below="@id/textview_title_circuit">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/textview_title_exercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:gravity="center"
+        android:text="@string/TitleExercise"
+        android:textSize="30sp"
+        android:layout_below="@id/textview_title_round">
+
+
+    </TextView>
+
+
+</RelativeLayout>
