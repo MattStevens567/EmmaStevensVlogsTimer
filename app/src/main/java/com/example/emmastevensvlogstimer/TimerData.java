@@ -1,6 +1,9 @@
 package com.example.emmastevensvlogstimer;
 
-public abstract class TimerData {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class TimerData implements Parcelable {
     private int mCircuitAmount;
     private int mCircuitRestTime;
 
@@ -21,6 +24,44 @@ public abstract class TimerData {
         mExerciseDuration = exerciseDuration;
     }
 
+    protected TimerData(Parcel in) {
+        mCircuitAmount = in.readInt();
+        mCircuitRestTime = in.readInt();
+        mRoundAmount = in.readInt();
+        mRoundRestTime = in.readInt();
+        mExerciseAmount = in.readInt();
+        mExerciseRestTime = in.readInt();
+        mExerciseDuration = in.readInt();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mCircuitAmount);
+        dest.writeInt(mCircuitRestTime);
+        dest.writeInt(mRoundAmount);
+        dest.writeInt(mRoundRestTime);
+        dest.writeInt(mExerciseAmount);
+        dest.writeInt(mExerciseRestTime);
+        dest.writeInt(mExerciseDuration);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<TimerData> CREATOR = new Creator<TimerData>() {
+        @Override
+        public TimerData createFromParcel(Parcel in) {
+            return new TimerData(in);
+        }
+
+        @Override
+        public TimerData[] newArray(int size) {
+            return new TimerData[size];
+        }
+    };
+
     // Getters used in TimerActivity
     public int getCircuitAmount() {
         return mCircuitAmount;
@@ -38,7 +79,7 @@ public abstract class TimerData {
         return mRoundRestTime;
     }
 
-    public int getmExerciseAmount() {
+    public int getExerciseAmount() {
         return mExerciseAmount;
     }
 

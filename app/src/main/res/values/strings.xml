@@ -7,7 +7,9 @@
     <string name="TitleCircuit">Circuit</string>
     <string name="TitleRound">Round</string>
     <string name="TitleExercise">Exercise</string>
-
-
+    <string name="SubHeadingAmount">Amount</string>
+    <string name="SubHeadingRest">Rest</string>
+    <string name="SubHeadingDuration">Duration</string>
+    <string name="ButtonDone">Done</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.example.emmastevensvlogstimer;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -20,12 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class TimerActivity extends AppCompatActivity {
 
+    private static final String TAG = "TimerActivity";
+
     private TimerData mTimerData;
 
-    // 60 Seconds
-    private static final long START_TIME_IN_MILLIS = 5000;
-    private static final String TAG = "TimerActivity";
-    private static final int PROGRESS_BAR_MAX = (int) START_TIME_IN_MILLIS;
+    // Recorded in ms e.g. 5s = 5000
+    private static long START_TIME_IN_MILLIS;
+    private static int PROGRESS_BAR_MAX;
 
     private FloatingActionButton mfabPlay, mfabPause, mfabReset;
     private ProgressBar mProgressbarTimer;
@@ -43,7 +45,12 @@ public class TimerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
+        Intent intent = getIntent();
+        mTimerData = intent.getParcelableExtra("TimerData");
 
+
+
+        Log.d(TAG, "mRoundRestTime: " + mTimerData.getRoundRestTime());
 
         init();
 
@@ -51,6 +58,11 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     public void init() {
+
+        // Setting up timer values
+        START_TIME_IN_MILLIS = mTimerData.getExerciseDuration()*1000;
+        PROGRESS_BAR_MAX = (int) START_TIME_IN_MILLIS;
+
 
         mfabPlay = findViewById(R.id.fab_play);
         mfabPause = findViewById(R.id.fab_pause);
@@ -146,7 +158,7 @@ public class TimerActivity extends AppCompatActivity {
         //mProgressbarTimer.setProgress((percentage));
 
 //        Log.d(TAG, "mTimeLeftInMillis: " + mTimeLeftInMillis);
-//        Log.d(TAG, "START_TIME_LEFT_IN_MILLIS: " + START_TIME_IN_MILLIS);
+//       Log.d(TAG, "START_TIME_LEFT_IN_MILLIS: " + START_TIME_IN_MILLIS);
 //        Log.d(TAG, "percentage: " + percentage);
 //        Log.d(TAG, "mProgressBarTimer: " + mProgressbarTimer.getProgress());
     }

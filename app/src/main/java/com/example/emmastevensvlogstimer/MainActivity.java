@@ -5,15 +5,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainActivity extends AppCompatActivity implements TimerDataCustomDialog.DialogListener {
 
     private ImageButton mButtonBaseline;
+    private TimerData mTimerData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,28 +37,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void loadTimer() {
+    public void loadTimer(TimerData timerData) {
+
         Intent intent = new Intent(this, TimerActivity.class);
+        intent.putExtra("TimerData", timerData);
         startActivity(intent);
     }
 
     public void openDialog() {
         TimerDataCustomDialog timerDataCustomDialog = new TimerDataCustomDialog();
         timerDataCustomDialog.show(getSupportFragmentManager(),"example dialog");
-//        Activity activity = getActivity();
-//        AlertDialog dialog = ...;
-//
-//// retrieve display dimensions
-//        Rect displayRectangle = new Rect();
-//        Window window = activity.getWindow();
-//        window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
-//
-//// inflate and adjust layout
-//        LayoutInflater inflater = (LayoutInflater)activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        View layout = inflater.inflate(R.layout.your_dialog_layout, null);
-//        layout.setMinimumWidth((int)(displayRectangle.width() * 0.9f));
-//        layout.setMinimumHeight((int)(displayRectangle.height() * 0.9f));
 
+    }
 
+    // Launches TimeActivity with custom data
+    @Override
+    public void getSeekBarData(int ca, int cr, int ra, int rr, int ea, int er, int ed) {
+        TimerDataCustom timerDataCustom = new TimerDataCustom(ca, cr, ra, rr, ea, er, ed);
+        mTimerData = timerDataCustom;
+        loadTimer(mTimerData);
     }
 }
