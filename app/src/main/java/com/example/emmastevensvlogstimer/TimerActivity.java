@@ -38,7 +38,7 @@ public class TimerActivity extends AppCompatActivity {
 
     private Boolean mTimerRunning;
 
-    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
+    private long mTimeLeftInMillis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +62,7 @@ public class TimerActivity extends AppCompatActivity {
         // Setting up timer values
         START_TIME_IN_MILLIS = mTimerData.getExerciseDuration()*1000;
         PROGRESS_BAR_MAX = (int) START_TIME_IN_MILLIS;
+        mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
 
         mfabPlay = findViewById(R.id.fab_play);
