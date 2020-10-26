@@ -1,6 +1,7 @@
 package com.example.emmastevensvlogstimer;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -26,7 +27,7 @@ public class TimerActivity extends AppCompatActivity {
 
     // Recorded in ms e.g. 5s = 5000
     private static long sMainTimerDuration, sSetupTimerDuration;
-    private static int sProgressBarMax, sProgressBarMaxSetup;
+    private static int sProgressBarDuration, sProgressBarSetup, sProgressBarRestTimeExercise, sProgressBarRestTimeRound, sProgressBarRestTimeCircuit;
     // Time before timer starts
 
     private TimerData mTimerData;
@@ -35,18 +36,21 @@ public class TimerActivity extends AppCompatActivity {
     private ProgressBar mProgressbarTimer;
     private TextView mTextViewTimeLeft;
     private ImageButton mButtonBack;
+    private TextView mTextViewCountExercise, mTextViewCountRound, mTextViewCountCircuit;
 
     private CountDownTimer mCountDownTimer;
 
     private boolean mMainTimerRunning;
     private boolean mSetupTimerRunning;
     private boolean mResting;
+    private boolean mNextRoundStart;
+    private boolean mTimerFirstRun;
 
-    private long mTimeLeftInMillis, mTimeleftInMillisSetup;
+    private long mTimeLeftInMillis, mTimeLeftInMillisSetup;
 
     private int mCountExercise, mCountRound, mCountCircuit;
     private int mTotalExercise, mTotalRound, mTotalCircuit;
-    private int mRestTimeExercise, mRestTimeRound, mRestTimeCircuit;
+    private long mRestTimeExercise, mRestTimeRound, mRestTimeCircuit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,36 +67,49 @@ public class TimerActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     public void init() {
 
         // Setting up Counts and rest times (Might have to change location if a a service is used)
-        mCountCircuit = 0;
-        mCountRound = 0;
-        mCountExercise = 0;
+        mCountCircuit = 1;
+        mCountRound = 1;
+        mCountExercise = 1;
 
         mTotalCircuit = mTimerData.getCircuitAmount();
         mTotalRound = mTimerData.getRoundAmount();
         mTotalExercise = mTimerData.getExerciseAmount();
 
-        mRestTimeCircuit = mTimerData.getCircuitRestTime();
-        mRestTimeRound = mTimerData.getRoundRestTime();
-        mRestTimeExercise = mTimerData.getExerciseRestTime();
+        mRestTimeCircuit = mTimerData.getCircuitRestTime()*1000;
+        mRestTimeRound = mTimerData.getRoundRestTime()*1000;
+        mRestTimeExercise = mTimerData.getExerciseRestTime()*1000;
+
+        sProgressBarRestTimeCircuit = (int) mRestTimeCircuit;
+        sProgressBarRestTimeRound = (int) mRestTimeRound;
+        sProgressBarRestTimeExercise = (int) mRestTimeExercise;
 
 
         // Setting up values for setup timer
-        sSetupTimerDuration = SETUP_TIME_IN_MILLIS;
-        sProgressBarMaxSetup = (int) sSetupTimerDuration;
-        mTimeleftInMillisSetup = sSetupTimerDuration;
+//        sSetupTimerDuration = SETUP_TIME_IN_MILLIS;
+//        sProgressBarSetup = (int) sSetupTimerDuration;
+//        mTimeleftInMillisSetup = sSetupTimerDuration;
 
         // Setting up timer values for main timer
+//        sMainTimerDuration = mTimerData.getExerciseDuration()*1000;
+//        sProgressBarMax = (int) sMainTimerDuration;
+//        mTimeLeftInMillis = sMainTimerDuration;
+
+        sSetupTimerDuration = SETUP_TIME_IN_MILLIS;
         sMainTimerDuration = mTimerData.getExerciseDuration()*1000;
-        sProgressBarMax = (int) sMainTimerDuration;
-        mTimeLeftInMillis = sMainTimerDuration;
+        sProgressBarDuration = (int) sMainTimerDuration;
+        sProgressBarSetup = (int) sSetupTimerDuration;
+        mTimeLeftInMillis = sSetupTimerDuration;
 
         // Setting up bools
         mSetupTimerRunning = true;
         mMainTimerRunning = false;
-        mResting = false;
+        mResting = true;
+        mNextRoundStart = false;
+        mTimerFirstRun = true;
 
         // Assigning ids
         mfabPlay = findViewById(R.id.fab_play);
@@ -101,16 +118,14 @@ public class TimerActivity extends AppCompatActivity {
         mProgressbarTimer = findViewById(R.id.progressbar_timer);
         mTextViewTimeLeft = findViewById(R.id.textview_time_left);
         mButtonBack = findViewById(R.id.imagebutton_back);
+        mTextViewCountCircuit = findViewById(R.id.textview_circuit_count);
+        mTextViewCountRound = findViewById(R.id.textview_round_count);
+        mTextViewCountExercise = findViewById(R.id.textview_exercise_count);
 
 
 
         mfabPlay.setOnClickListener(view -> {
-
-            if(mSetupTimerRunning) {
-                setupTimer();
-            } else {
-                mainTimer();
-            }
+            mainTimer();
         });
         mfabPause.setOnClickListener(view -> {
             pauseTimer();
@@ -124,40 +139,19 @@ public class TimerActivity extends AppCompatActivity {
 
         });
 
-        updateCountDownText(mTimeleftInMillisSetup);
-        mProgressbarTimer.setMax(sProgressBarMaxSetup);
-        mProgressbarTimer.setProgress(sProgressBarMaxSetup);
+        mTextViewCountCircuit.setText( mCountCircuit + "/" + mTimerData.getCircuitAmount());
+        mTextViewCountRound.setText( mCountRound + "/" + mTimerData.getRoundAmount());
+        mTextViewCountExercise.setText( mCountExercise + "/" + mTimerData.getExerciseAmount());
+
+        updateCountDownText(mTimeLeftInMillis);
+        mProgressbarTimer.setMax(sProgressBarSetup);
+        mProgressbarTimer.setProgress(sProgressBarSetup);
 
     }
 
     // Timer for countdown before workout begins
     // Kept separate from main timer logic as otherwise
     // there would be lots of spaghetti code to include it
-    public void setupTimer() {
-        mCountDownTimer = new CountDownTimer(mTimeleftInMillisSetup, 200) {
-            @Override
-            public void onTick(long l) {
-                mTimeleftInMillisSetup = l;
-                updateCountDownText(mTimeleftInMillisSetup);
-                updateProgressBar(mTimeleftInMillisSetup);
-            }
-
-            // Initialise timer to run main exercises
-            @Override
-            public void onFinish() {
-                mSetupTimerRunning = false;
-                updateCountDownText(mTimeleftInMillisSetup);
-                mProgressbarTimer.setMax(sProgressBarMax);
-                //mProgressbarTimer.setProgress(sProgressBarMax);
-                updateProgressBar(mTimeLeftInMillis);
-                mainTimer();
-
-            }
-        }.start();
-
-        mMainTimerRunning = true;
-        mfabReset.setVisibility(View.INVISIBLE);
-    }
 
 
     // Main timer that runs for exercise
@@ -173,6 +167,7 @@ public class TimerActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
+                mCountDownTimer.cancel();
                 // Make play and pause buttons invisible
                 // User can only push reset button now
 //                mfabPlay.setVisibility(View.INVISIBLE);
@@ -184,38 +179,73 @@ public class TimerActivity extends AppCompatActivity {
                 Log.d(TAG, "mCountExercise: " + mCountExercise);
                 Log.d(TAG, "mCountRound: " + mCountRound);
                 Log.d(TAG, "mCountCircuit: " + mCountCircuit);
+                Log.d(TAG, "mTimeLeftInMillis Before: " + mTimeLeftInMillis);
 //                Log.d(TAG, "sMainTimerDuration" + sMainTimerDuration);
 //                Log.d(TAG, "mExerciseRestTime: " + mRestTimeExercise);
 //                Log.d(TAG, "mRoundRestTime: " + mRestTimeRound);
 //                Log.d(TAG, "mCircuitRestTime: " + mRestTimeCircuit);
-                if(mCountExercise < mTotalExercise) {
-                    mCountExercise++;
-                    if(mResting) {
-                        mTimeLeftInMillis = mRestTimeExercise;
+                if(!mSetupTimerRunning) {
+                    if(mCountExercise < mTotalExercise) {
+                        Log.d(TAG, "mResting: " + mResting);
+                        if(mResting) {
+
+                            mTimeLeftInMillis = mRestTimeExercise;
+                            mProgressbarTimer.setMax(sProgressBarRestTimeExercise);
+                        } else {
+                            if(mNextRoundStart) {
+                                mNextRoundStart = false;
+                            } else {
+                                mCountExercise++;
+                            }
+
+                            mTextViewCountExercise.setText( mCountExercise + "/" + mTimerData.getExerciseAmount());
+                            mTimeLeftInMillis = sMainTimerDuration;
+                            mProgressbarTimer.setMax(sProgressBarDuration);
+
+                        }
+                        // invert boolean value
+                        mResting = !mResting;
+
                     } else {
-                        mTimeLeftInMillis = sMainTimerDuration;
+                        mCountExercise = 1;
+                        mNextRoundStart = true;
+                        if(mCountRound < mTotalRound) {
+                            mCountRound++;
+                            mTextViewCountExercise.setText( mCountExercise + "/" + mTimerData.getExerciseAmount());
+                            mTextViewCountRound.setText( mCountRound + "/" + mTimerData.getRoundAmount());
+                            mTimeLeftInMillis = mRestTimeRound;
+                            mProgressbarTimer.setMax(sProgressBarRestTimeRound);
 
+                        } else {
+                            mCountRound = 1;
+                            if(mCountCircuit < mTotalCircuit) {
+                                mCountCircuit++;
+                                mTextViewCountExercise.setText( mCountExercise + "/" + mTimerData.getExerciseAmount());
+                                mTextViewCountRound.setText( mCountRound + "/" + mTimerData.getRoundAmount());
+                                mTextViewCountCircuit.setText( mCountCircuit + "/" + mTimerData.getCircuitAmount());
+                                mTimeLeftInMillis = mRestTimeCircuit;
+                                mProgressbarTimer.setMax(sProgressBarRestTimeCircuit);
+                            } else {
+                                mTimeLeftInMillis = 0;
+                                updateCountDownText(mTimeLeftInMillis);
+                                updateProgressBar(mTimeLeftInMillis);
+                            }
+
+
+                        }
+                        mResting = false;
                     }
-                    // invert boolean value
-                    mResting = !mResting;
-
                 } else {
-                    mCountExercise = 0;
-                    if(mCountRound < mTotalRound) {
-                        mCountRound++;
-                        mTimeLeftInMillis = mRestTimeRound;
-
-                    } else {
-                        mCountRound = 0;
-                        mCountCircuit++;
-                        mTimeLeftInMillis = mTimerData.getCircuitRestTime();
-
-                    }
+                    mSetupTimerRunning = false;
+                    mTimeLeftInMillis = sMainTimerDuration;
+                    mProgressbarTimer.setMax(sProgressBarDuration);
                 }
+
+                Log.d(TAG, "mTimeLeftInMillis After: " + mTimeLeftInMillis);
                 mainTimer();
             }
-        };
-        mCountDownTimer.start();
+        }.start();
+        //mCountDownTimer.start();
 
         mMainTimerRunning = true;
         mfabReset.setVisibility(View.INVISIBLE);
@@ -229,8 +259,9 @@ public class TimerActivity extends AppCompatActivity {
 
     public void resetTimer() {
         Log.d(TAG, "ResetTimer Clicked");
+        mTimerFirstRun = true;
         mTimeLeftInMillis = sMainTimerDuration;
-        //mProgressbarTimer.setProgress(PROGRESS_BAR_MAX);
+
         updateCountDownText(mTimeLeftInMillis);
         updateProgressBar(mTimeLeftInMillis);
 
@@ -240,8 +271,17 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     public void updateCountDownText(long timeLeftInMillis) {
-        int minutes = (int) (timeLeftInMillis / 1000) / 60;
-        int seconds = (int) (timeLeftInMillis / 1000) % 60;
+
+        // Little bit of logic to make
+        if(mTimerFirstRun) {
+            mTimerFirstRun = false;
+        } else {
+            timeLeftInMillis = timeLeftInMillis + 1000;
+        }
+
+
+        int minutes = (int) ((timeLeftInMillis) / 1000) / 60;
+        int seconds = (int) ((timeLeftInMillis) / 1000) % 60;
 
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
 
@@ -266,6 +306,9 @@ public class TimerActivity extends AppCompatActivity {
         mProgressbarTimer.setProgress(0);
     }
 
+
+    // Add another animate function for when timer resets back
+    // atm 500 is to slow and looks weird
     public void setProgressAnimate(ProgressBar pb, int progressTo) {
 //        ObjectAnimator animation = ObjectAnimator.ofInt(pb, "progress", pb.getProgress(), progressTo);
         ObjectAnimator animation = ObjectAnimator.ofInt(pb, "progress", pb.getProgress(), progressTo);

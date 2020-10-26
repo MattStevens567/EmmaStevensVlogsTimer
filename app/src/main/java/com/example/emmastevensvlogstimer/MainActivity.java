@@ -1,25 +1,18 @@
 package com.example.emmastevensvlogstimer;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
-import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements TimerDataCustomDialog.DialogListener {
 
     private static final String TAG = "MainActivity";
 
-    private ImageButton mButtonBaseline;
+    private ImageButton mButtonTimerCustom;
+    private ImageButton mButtonTimerArmsAndLegs;
     private TimerData mTimerData;
 
 
@@ -33,10 +26,17 @@ public class MainActivity extends AppCompatActivity implements TimerDataCustomDi
     }
 
     public void init() {
-        mButtonBaseline = findViewById(R.id.imagebutton_baseline);
-        mButtonBaseline.setOnClickListener(view -> {
+        mButtonTimerCustom = findViewById(R.id.ib_timer_custom);
+        mButtonTimerCustom.setOnClickListener(view -> {
             openDialog();
         });
+
+        mButtonTimerArmsAndLegs = findViewById(R.id.ib_timer_armsandlegs);
+        mButtonTimerArmsAndLegs.setOnClickListener(view -> {
+            mTimerData = new TimerDataArmsAndLegs();
+            loadTimer(mTimerData);
+        });
+
     }
 
     public void loadTimer(TimerData timerData) {

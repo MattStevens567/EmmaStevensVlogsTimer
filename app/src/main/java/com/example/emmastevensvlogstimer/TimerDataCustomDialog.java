@@ -41,9 +41,14 @@ public class TimerDataCustomDialog extends AppCompatDialogFragment {
     private TextView mTextViewExerciseRest;
     private TextView mTextViewExerciseDuration;
 
+    private int mExerciseDurationProg, mExerciseAmountProg;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        mExerciseDurationProg = 10;
+        mExerciseAmountProg = 1;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -65,9 +70,9 @@ public class TimerDataCustomDialog extends AppCompatDialogFragment {
             int circuitRest = mSeekbarCircuitRest.getProgress();
             int roundAmount = mSeekbarRoundAmount.getProgress();
             int roundRest = mSeekbarRoundRest.getProgress();
-            int exerciseAmount = mSeekbarExerciseAmount.getProgress();
+            int exerciseAmount = mExerciseAmountProg;
             int exerciseRest = mSeekbarExerciseRest.getProgress();
-            int exerciseDuration = mSeekbarExerciseDuration.getProgress();
+            int exerciseDuration = mExerciseDurationProg;
             listener.getSeekBarData(circuitAmount, circuitRest, roundAmount, roundRest, exerciseAmount, exerciseRest, exerciseDuration);
 
         });
@@ -184,14 +189,22 @@ public class TimerDataCustomDialog extends AppCompatDialogFragment {
     }
 
     public void initExerciseAmount(View view) {
-        mTextViewExerciseAmount = view.findViewById(R.id.textView_exercise_amount);
+        int max = 10;
+        int min = 1;
 
+        mTextViewExerciseAmount = view.findViewById(R.id.textView_exercise_amount);
         mSeekbarExerciseAmount = view.findViewById(R.id.seekbar_exercise_amount);
-        mSeekbarExerciseAmount.setMax(10);
+        mSeekbarExerciseAmount.setMax(max);
         mSeekbarExerciseAmount.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
+
+                if(progress < min) {
+                    progress = min;
+                }
+
                 mTextViewExerciseAmount.setText(String.valueOf(progress));
+                mExerciseAmountProg = progress;
             }
 
             @Override
@@ -214,6 +227,7 @@ public class TimerDataCustomDialog extends AppCompatDialogFragment {
 
                 progress = (progress/stepSize)*stepSize;
                 seekBar.setProgress(progress);
+
                 Log.d(TAG, "progress: " + progress);
                 mTextViewExerciseRest.setText(String.valueOf(progress + "s"));
             }
@@ -227,19 +241,26 @@ public class TimerDataCustomDialog extends AppCompatDialogFragment {
     }
 
     public void initExerciseDuration(View view) {
-        mTextViewExerciseDuration = view.findViewById(R.id.textview_exercise_duration);
+        int min = 10;
+        int max = 60;
+        int stepSize = 5;
 
+        mTextViewExerciseDuration = view.findViewById(R.id.textview_exercise_duration);
         mSeekbarExerciseDuration = view.findViewById(R.id.seekbar_exercise_duration);
-        mSeekbarExerciseDuration.setMax(60);
+        mSeekbarExerciseDuration.setMax(max);
         mSeekbarExerciseDuration.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean b) {
-                int stepSize = 5;
+
 
                 progress = (progress/stepSize)*stepSize;
                 seekBar.setProgress(progress);
+                if(progress < min) {
+                    progress = min;
+                }
                 Log.d(TAG, "progress: " + progress);
                 mTextViewExerciseDuration.setText(String.valueOf(progress + "s"));
+                mExerciseDurationProg = progress;
             }
 
             @Override

@@ -196,7 +196,7 @@
 
         android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:text="0">
+        android:text="1">
 
     </TextView>
 
@@ -258,7 +258,7 @@
         android:layout_alignBottom="@id/seekbar_exercise_duration"
         android:layout_alignParentEnd="true"
         android:gravity="center"
-        android:text="0s">
+        android:text="10s">
 
     </TextView>
 
