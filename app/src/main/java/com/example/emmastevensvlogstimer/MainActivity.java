@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,6 +17,8 @@ import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements TimerDataCustomDialog.DialogListener {
 
+    private static final String TAG = "MainActivity";
+
     private ImageButton mButtonBaseline;
     private TimerData mTimerData;
 
@@ -24,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements TimerDataCustomDi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Log.d(TAG, "onCreate Called");
         init();
 
     }
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements TimerDataCustomDi
     public void init() {
         mButtonBaseline = findViewById(R.id.imagebutton_baseline);
         mButtonBaseline.setOnClickListener(view -> {
-//            loadTimer();
             openDialog();
         });
     }
