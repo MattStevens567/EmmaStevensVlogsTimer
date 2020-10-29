@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class TimerData implements Parcelable {
+    private String mWorkoutName;
+
     private int mCircuitAmount;
     private int mCircuitRestTime;
 
@@ -14,7 +16,8 @@ public class TimerData implements Parcelable {
     private int mExerciseRestTime;
     private int mExerciseDuration;
 
-    public TimerData(int circuitAmount, int circuitRestTime, int roundAmount, int roundRestTime, int exerciseAmount, int exerciseRestTime, int exerciseDuration) {
+    public TimerData(String workoutName, int circuitAmount, int circuitRestTime, int roundAmount, int roundRestTime, int exerciseAmount, int exerciseRestTime, int exerciseDuration) {
+        mWorkoutName = workoutName;
         mCircuitAmount = circuitAmount;
         mCircuitRestTime = circuitRestTime;
         mRoundAmount = roundAmount;
@@ -25,6 +28,7 @@ public class TimerData implements Parcelable {
     }
 
     protected TimerData(Parcel in) {
+        mWorkoutName = in.readString();
         mCircuitAmount = in.readInt();
         mCircuitRestTime = in.readInt();
         mRoundAmount = in.readInt();
@@ -36,6 +40,7 @@ public class TimerData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(mWorkoutName);
         dest.writeInt(mCircuitAmount);
         dest.writeInt(mCircuitRestTime);
         dest.writeInt(mRoundAmount);
@@ -63,6 +68,12 @@ public class TimerData implements Parcelable {
     };
 
     // Getters used in TimerActivity
+
+
+    public String getWorkoutName() {
+        return mWorkoutName;
+    }
+
     public int getCircuitAmount() {
         return mCircuitAmount;
     }

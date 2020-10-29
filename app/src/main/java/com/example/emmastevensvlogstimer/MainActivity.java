@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity implements TimerDataCustomDi
 
     private ImageButton mButtonTimerCustom;
     private ImageButton mButtonTimerArmsAndLegs;
+    private ImageButton mButtonTimerLegs;
     private TimerData mTimerData;
 
 
@@ -34,6 +35,12 @@ public class MainActivity extends AppCompatActivity implements TimerDataCustomDi
         mButtonTimerArmsAndLegs = findViewById(R.id.ib_timer_armsandlegs);
         mButtonTimerArmsAndLegs.setOnClickListener(view -> {
             mTimerData = new TimerDataArmsAndLegs();
+            loadTimer(mTimerData);
+        });
+
+        mButtonTimerLegs = findViewById(R.id.ib_timer_legs);
+        mButtonTimerLegs.setOnClickListener(view -> {
+            mTimerData = new TimerDataLegs();
             loadTimer(mTimerData);
         });
 

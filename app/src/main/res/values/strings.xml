@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">EJS Timer</string>
     <string name="StartTimer">Start Timer</string>
-    <string name="Title">Emma Stevens Vlogs LOGO or Something </string>
+    <string name="Title">EJS Workout Timer </string>
 
     <!-- Custom Dialog Box Strings -->
     <string name="TitleCircuit">Circuit</string>

@@ -1,6 +1,7 @@
 package com.example.emmastevensvlogstimer;
 
 public class TimerDataArmsAndLegs extends TimerData {
+    private final static String wn = "Arms and Legs";
     private final static int ca = 3;
     private final static int cr = 30;
     private final static int ra = 3;
@@ -10,7 +11,7 @@ public class TimerDataArmsAndLegs extends TimerData {
     private final static int ed = 30;
 
     public TimerDataArmsAndLegs() {
-        super(ca, cr, ra, rr, ea, er, ed);
+        super(wn, ca, cr, ra, rr, ea, er, ed);
         //setmCircuitAmount(ca);
 
         //super(ca, cr, ra, rr, ea, er, ed);
