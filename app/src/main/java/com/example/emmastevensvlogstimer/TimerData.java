@@ -68,8 +68,6 @@ public class TimerData implements Parcelable {
     };
 
     // Getters used in TimerActivity
-
-
     public String getWorkoutName() {
         return mWorkoutName;
     }
