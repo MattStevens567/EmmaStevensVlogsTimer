@@ -6,15 +6,15 @@ import android.os.Parcelable;
 public class TimerData implements Parcelable {
     private String mWorkoutName;
 
-    private int mCircuitAmount;
-    private int mCircuitRestTime;
+    private int mCircuitAmount;     // ca
+    private int mCircuitRestTime;   // cr
 
-    private int mRoundAmount;
-    private int mRoundRestTime;
+    private int mRoundAmount;       // ra
+    private int mRoundRestTime;     // rt
 
-    private int mExerciseAmount;
-    private int mExerciseRestTime;
-    private int mExerciseDuration;
+    private int mExerciseAmount;    // ea
+    private int mExerciseRestTime;  // er
+    private int mExerciseDuration;  // ed
 
     public TimerData(String workoutName, int circuitAmount, int circuitRestTime, int roundAmount, int roundRestTime, int exerciseAmount, int exerciseRestTime, int exerciseDuration) {
         mWorkoutName = workoutName;

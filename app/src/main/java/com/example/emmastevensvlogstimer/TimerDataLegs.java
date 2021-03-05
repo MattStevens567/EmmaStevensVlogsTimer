@@ -1,5 +1,7 @@
 package com.example.emmastevensvlogstimer;
 
+// Check TimerData Class for what acronyms mean
+
 public class TimerDataLegs extends TimerData {
     private final static String wn = "Leg Workout";
     private final static int ca = 3;
